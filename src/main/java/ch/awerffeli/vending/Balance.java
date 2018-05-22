@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Balance<T> {
 
-    protected final HashMap<T, Integer> balance = new HashMap<>();
+    final private HashMap<T, Integer> balance = new HashMap<>();
 
     public HashMap<T, Integer> getBalance() {
         return balance;

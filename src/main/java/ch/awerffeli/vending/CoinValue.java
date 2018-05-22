@@ -1,7 +1,5 @@
 package ch.awerffeli.vending;
 
-//todo: is this needed
-// 1ct, 2ct, 5ct, 10ct, 20ct, 50ct, 1€, 2€.
 public enum CoinValue {
 
     CENT_1(1),

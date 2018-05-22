@@ -8,3 +8,8 @@ Run with gradle wrapper to run application:
 ```
 $ ./gradlew run
 ```
+
+Run with gradle wrapper to run tests:
+```
+$ ./gradlew test
+```

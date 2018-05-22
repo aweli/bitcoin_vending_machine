@@ -9,6 +9,11 @@ public class Item {
         this.price = price;
     }
 
+    public Item(final String name) {
+        this.name = name;
+        this.price = 0;
+    }
+
     public String getName() {
         return name;
     }

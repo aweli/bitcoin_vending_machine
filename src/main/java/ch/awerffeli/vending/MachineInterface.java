@@ -1,6 +1,8 @@
 package ch.awerffeli.vending;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for a vending machine.
@@ -13,22 +15,22 @@ public interface MachineInterface {
      * 
      * @param coins the coin inserted
      */
-    void insertCash(List<Coin> coins);
+    void insertCoins(List<Coin> coins);
 
     /**
      * Returns the inserted an unspent coins to the user
      * 
-     * @return a list of coins to be refunded
+     * @return a map of coins to be refunded
      */
-    List<Coin> refundBalance();
+    Map<Coin, Integer> refundBalance();
 
     /**
      * Purchase an item with the given itemName if enough coins have been inserted.
      * 
-     * @param itemName the name of the item to be purchased
+     * @param item the item to be purchased
      * @return returns the purchased item
      */
-    Item purchaseItem(int itemName);
+    Item purchaseItem(String itemName);
 
     /**
      * Get a list of all items the machine is selling
@@ -36,13 +38,9 @@ public interface MachineInterface {
      */
     List<Item> getItemList();
 
-    //todo: how to handle amount of coins
-
     /**
-     * Returns a list of all items 
+     * Returns a map of all coins
      * @return
      */
-    List<Coin> getAvailableCoins();
-
-
+    HashMap<Coin, Integer> getAvailableCoins();
 }

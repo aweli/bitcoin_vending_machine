@@ -1,9 +1,11 @@
 package ch.awerffeli.vending;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import static ch.awerffeli.vending.CoinValue.*;
 
-//todo: extend Coinbalance
 public class CoinBalance {
 
     HashMap<Coin, Integer> balance;
@@ -25,7 +27,26 @@ public class CoinBalance {
         return balance;
     }
 
+    public int getTotalBalanceValue() {
+        int totalAmount = 0;
+
+        final Iterator<Map.Entry<Coin, Integer>> iterator = this.balance.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry)iterator.next();
+            Coin coin = (Coin) pair.getKey();
+            int quantity = (int) pair.getValue();
+
+            totalAmount += coin.getValue()*quantity;
+        }
+
+        return totalAmount;
+    }
+
     public void addCoin(Coin coin) {
-        balance.put(coin, balance.get(coin) + 1);
+        addCoin(coin, 1);
+    }
+
+    public void addCoin(Coin coin, int quantity) {
+        balance.put(coin, balance.get(coin) + quantity);
     }
 }
