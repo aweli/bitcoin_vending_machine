@@ -1,5 +1,6 @@
 package ch.awerffeli.vending;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +28,16 @@ public interface MachineInterface {
     /**
      * Purchase an item with the given itemName if enough coins have been inserted.
      * 
-     * @param item the item to be purchased
-     * @return returns the purchased item
+     * @param itemName the item to be purchased
+     * @return true if purchase was successfull
      */
-    Item purchaseItem(String itemName);
+    boolean purchaseItem(String itemName);
 
     /**
-     * Get a list of all items the machine is selling
-     * @return
+     * Get a map of all items the machine is selling
+     * @return a map with item and quantity
      */
-    List<Item> getItemList();
+    Collection<Item> getItemList();
 
     /**
      * Returns a map of all coins

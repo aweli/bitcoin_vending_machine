@@ -21,5 +21,9 @@ public enum CoinValue {
         return this.value;
     }
 
+    public static CoinValue[] getAllCoinValues() {
+        CoinValue[] coinValues = {CENT_1, CENT_2, CENT_5, CENT_10, CENT_20, CENT_50, EURO_1, EURO_2};
+        return coinValues;
+    }
 
 }

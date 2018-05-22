@@ -1,5 +1,7 @@
 package ch.awerffeli.vending;
 
+import ch.awerffeli.vending.exception.CoinsExchangeNotPossibleException;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,7 +10,7 @@ import static ch.awerffeli.vending.CoinValue.*;
 
 public class CoinBalance {
 
-    HashMap<Coin, Integer> balance;
+    protected HashMap<Coin, Integer> balance;
 
     public CoinBalance() {
         this.balance = new HashMap<>();
@@ -32,7 +34,7 @@ public class CoinBalance {
 
         final Iterator<Map.Entry<Coin, Integer>> iterator = this.balance.entrySet().iterator();
         while(iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
+            Map.Entry pair = iterator.next();
             Coin coin = (Coin) pair.getKey();
             int quantity = (int) pair.getValue();
 
@@ -49,4 +51,26 @@ public class CoinBalance {
     public void addCoin(Coin coin, int quantity) {
         balance.put(coin, balance.get(coin) + quantity);
     }
+
+    public void removeCoin(Coin coin, int quantity) {
+        final Integer currentQuantity = this.balance.get(coin);
+        if (currentQuantity < quantity) {
+            throw new CoinsExchangeNotPossibleException("cannot remove coin, reason: not enough coins");
+        }
+
+        balance.put(coin, currentQuantity - quantity);
+
+    }
+
+    public void removeCoin(Coin coin) {
+        removeCoin(coin, 1);
+    }
+
+    public CoinBalance clone() {
+        CoinBalance coinBalanceClone = new CoinBalance();
+        coinBalanceClone.balance = this.balance;
+
+        return coinBalanceClone;
+    }
+
 }
