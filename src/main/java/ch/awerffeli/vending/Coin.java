@@ -1,29 +1,29 @@
 package ch.awerffeli.vending;
 
-import ch.awerffeli.vending.exception.VendingMachineException;
+public enum Coin {
 
-public class Coin {
+    CENT_1(1),
+    CENT_2(2),
+    CENT_5(5),
+    CENT_10(10),
+    CENT_20(20),
+    CENT_50(50),
+    EURO_1(100),
+    EURO_2(200);
 
-    final CoinValue coinValue;
+    private final int value;
 
-    public Coin(CoinValue coinValue) {
-        if(coinValue == null) {
-            throw new VendingMachineException("CoinValue has to be set");
-        }
-        this.coinValue = coinValue;
+    Coin(int value) {
+        this.value = value;
     }
 
     public int getValue() {
-        return coinValue.getValue();
+        return this.value;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return !(obj instanceof Coin) ? false : this.coinValue.getValue() == ((Coin)obj).coinValue.getValue();
+    public static Coin[] getAllCoinValues() {
+        Coin[] coins = {CENT_1, CENT_2, CENT_5, CENT_10, CENT_20, CENT_50, EURO_1, EURO_2};
+        return coins;
     }
 
-    @Override
-    public int hashCode() {
-        return coinValue.getValue();
-    }
 }

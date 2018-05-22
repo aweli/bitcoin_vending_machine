@@ -3,45 +3,32 @@ package ch.awerffeli.vending;
 import ch.awerffeli.vending.exception.CoinsExchangeNotPossibleException;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
-import static ch.awerffeli.vending.CoinValue.*;
+import static ch.awerffeli.vending.Coin.*;
 
 public class CoinBalance {
 
-    protected HashMap<Coin, Integer> balance;
+    private HashMap<Coin, Integer> balance;
 
-    public CoinBalance() {
+    protected CoinBalance() {
         this.balance = new HashMap<>();
 
-        balance.put(new Coin(CENT_1), 0);
-        balance.put(new Coin(CENT_2), 0);
-        balance.put(new Coin(CENT_5), 0);
-        balance.put(new Coin(CENT_10), 0);
-        balance.put(new Coin(CENT_20), 0);
-        balance.put(new Coin(CENT_50), 0);
-        balance.put(new Coin(EURO_1), 0);
-        balance.put(new Coin(EURO_2), 0);
+        balance.put(CENT_1, 0);
+        balance.put(CENT_2, 0);
+        balance.put(CENT_5, 0);
+        balance.put(CENT_10, 0);
+        balance.put(CENT_20, 0);
+        balance.put(CENT_50, 0);
+        balance.put(EURO_1, 0);
+        balance.put(EURO_2, 0);
     }
 
-    public HashMap<Coin, Integer> getBalance() {
+    protected HashMap<Coin, Integer> getBalance() {
         return balance;
     }
 
     public int getTotalBalanceValue() {
-        int totalAmount = 0;
-
-        final Iterator<Map.Entry<Coin, Integer>> iterator = this.balance.entrySet().iterator();
-        while(iterator.hasNext()) {
-            Map.Entry pair = iterator.next();
-            Coin coin = (Coin) pair.getKey();
-            int quantity = (int) pair.getValue();
-
-            totalAmount += coin.getValue()*quantity;
-        }
-
-        return totalAmount;
+        return this.balance.entrySet().stream().map(e -> e.getKey().getValue() * e.getValue()).mapToInt(Number::intValue).sum();
     }
 
     public void addCoin(Coin coin) {

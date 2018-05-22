@@ -6,7 +6,7 @@ import ch.awerffeli.vending.exception.SoldOutException;
 
 import java.util.*;
 
-import static ch.awerffeli.vending.CoinValue.*;
+import static ch.awerffeli.vending.Coin.*;
 
 public class VendingMachine implements MachineInterface {
 
@@ -19,14 +19,14 @@ public class VendingMachine implements MachineInterface {
         this.itemBalance = new ItemBalance();
         this.coinBalanceMachine = new CoinBalance();
 
-        this.coinBalanceMachine.addCoin(new Coin(CENT_1), 1);
-        this.coinBalanceMachine.addCoin(new Coin(CENT_2), 2);
-        this.coinBalanceMachine.addCoin(new Coin(CENT_5), 5);
-        this.coinBalanceMachine.addCoin(new Coin(CENT_10), 5);
-        this.coinBalanceMachine.addCoin(new Coin(CENT_20), 5);
-        this.coinBalanceMachine.addCoin(new Coin(CENT_50), 5);
-        this.coinBalanceMachine.addCoin(new Coin(EURO_1), 5);
-        this.coinBalanceMachine.addCoin(new Coin(EURO_2), 5);
+        this.coinBalanceMachine.addCoin(CENT_1, 1);
+        this.coinBalanceMachine.addCoin(CENT_2, 2);
+        this.coinBalanceMachine.addCoin(CENT_5, 5);
+        this.coinBalanceMachine.addCoin(CENT_10, 5);
+        this.coinBalanceMachine.addCoin(CENT_20, 5);
+        this.coinBalanceMachine.addCoin(CENT_50, 5);
+        this.coinBalanceMachine.addCoin(EURO_1, 5);
+        this.coinBalanceMachine.addCoin(EURO_2, 5);
 
         this.itemBalance.addItem("BTC", 200, 4);
         this.itemBalance.addItem("XES", 300, 5);
@@ -55,6 +55,9 @@ public class VendingMachine implements MachineInterface {
             throws SoldOutException, NotEnoughCreditException, CoinsExchangeNotPossibleException{
 
         final Item item = this.itemBalance.get(itemName);
+        if(item == null) {
+            return false;
+        }
 
         final int itemBalance = item.getQuantity();
 
@@ -100,32 +103,23 @@ public class VendingMachine implements MachineInterface {
     @Override
     public HashMap<Coin, Integer> getAvailableCoins() {
 
-        CoinBalance totalCoinBalance = new CoinBalance();
-
-
-        final Iterator<Map.Entry<Coin, Integer>> machineCoinsIterator = this.coinBalanceMachine.getBalance().entrySet().iterator();
-        while (machineCoinsIterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) machineCoinsIterator.next();
-            Coin coin = (Coin) pair.getKey();
-            int quantity = (int) pair.getValue();
-
-            totalCoinBalance.addCoin(coin, quantity);
-        }
+        final CoinBalance totalCoinBalance = new CoinBalance();
+        this.coinBalanceMachine.getBalance().entrySet().forEach(e -> totalCoinBalance.addCoin(e.getKey(), e.getValue()));
 
         return totalCoinBalance.getBalance();
     }
 
-    private int deductCoins(int removeValue, CoinValue coinValue, CoinBalance coinBalanceCopy) {
-        int amount = 0;
-        if(removeValue >= coinValue.getValue()) {
-            amount = removeValue / coinValue.getValue();
-            int balanceCoinAmount = coinBalanceCopy.getBalance().get(new Coin(coinValue));
+    private int deductCoins(int removeValue, Coin coin, CoinBalance coinBalanceCopy) {
+        int amount;
+        if(removeValue >= coin.getValue()) {
+            amount = removeValue / coin.getValue();
+            int balanceCoinAmount = coinBalanceCopy.getBalance().get(coin);
             if(amount > balanceCoinAmount) {
                 amount = balanceCoinAmount;
             }
-            coinBalanceCopy.removeCoin(new Coin(coinValue), amount);
+            coinBalanceCopy.removeCoin(coin, amount);
 
-            return removeValue - (amount * coinValue.getValue());
+            return removeValue - (amount * coin.getValue());
         }
 
         return removeValue;
@@ -136,7 +130,7 @@ public class VendingMachine implements MachineInterface {
      * If no coins could be remove return null
      *
      * @param removeValue The value to be deducted
-     * @throws In case machine does not have enough exchange a CoinsExchangeNotPossibleException is thrown
+     * @throws CoinsExchangeNotPossibleException In case machine does not have enough exchange a Exception is thrown
      * @return returns a Map of removed coins or null if removal was not possible
      */
     private Map<Coin,Integer> deductCoinsFromMachine(int removeValue) throws CoinsExchangeNotPossibleException{
@@ -147,18 +141,19 @@ public class VendingMachine implements MachineInterface {
             return new HashMap<>();
         }
 
-        final CoinValue[] allCoinValues = CoinValue.getAllCoinValues();
-
-        Arrays.sort(allCoinValues, Collections.reverseOrder());
+        final Coin[] allCoins = Coin.getAllCoinValues();
+        Arrays.sort(allCoins, Collections.reverseOrder());
 
         final Map<Coin, Integer> coinsToBeRemoved = new HashMap<>();
 
         int tempRemoveValue = removeValue;
-        for(CoinValue coinValue : allCoinValues) {
-            removeValue = deductCoins(removeValue, coinValue, coinBalanceCopy);
+
+        //cannot use stream / lambda because of manipulation of variable outside of loop
+        for(Coin coin : allCoins) {
+            removeValue = deductCoins(removeValue, coin, coinBalanceCopy);
             if(removeValue != tempRemoveValue) {
                 int difference = tempRemoveValue-removeValue;
-                coinsToBeRemoved.put(new Coin(coinValue), difference / coinValue.getValue());
+                coinsToBeRemoved.put(coin, difference / coin.getValue());
             }
             tempRemoveValue = removeValue;
         }

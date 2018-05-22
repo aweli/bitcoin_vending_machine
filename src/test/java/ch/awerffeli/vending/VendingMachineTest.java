@@ -9,15 +9,13 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static ch.awerffeli.vending.CoinValue.*;
-import static ch.awerffeli.vending.CoinValue.EURO_1;
-import static ch.awerffeli.vending.CoinValue.EURO_2;
+import static ch.awerffeli.vending.Coin.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertSame;
 
 public class VendingMachineTest {
 
-    MachineInterface vendingMachine;
+    private MachineInterface vendingMachine;
 
     @Before
     public void setup() {
@@ -28,31 +26,31 @@ public class VendingMachineTest {
     public void testInsertAndRefundCoins() {
         vendingMachine = new VendingMachine();
 
-        List<Coin> coinsInWallet = new ArrayList();
+        List<Coin> coinsInWallet = new ArrayList<>();
 
-        coinsInWallet.add(new Coin(CENT_1));
-        coinsInWallet.add(new Coin(CENT_1));
-        coinsInWallet.add(new Coin(CENT_50));
-        coinsInWallet.add(new Coin(EURO_1));
-        coinsInWallet.add(new Coin(EURO_2));
+        coinsInWallet.add(CENT_1);
+        coinsInWallet.add(CENT_1);
+        coinsInWallet.add(CENT_50);
+        coinsInWallet.add(EURO_1);
+        coinsInWallet.add(EURO_2);
         //total = 3.52
 
         vendingMachine.insertCoins(coinsInWallet);
         Map<Coin, Integer> userCoinsInMachine = vendingMachine.refundBalance();
 
-        assertSame(null, userCoinsInMachine.get(new Coin(CENT_1)));
-        assertSame(1, userCoinsInMachine.get(new Coin(CENT_2)));
-        assertSame(1, userCoinsInMachine.get(new Coin(CENT_50)));
-        assertSame(1, userCoinsInMachine.get(new Coin(EURO_1)));
-        assertSame(1, userCoinsInMachine.get(new Coin(EURO_2)));
+        assertSame(null, userCoinsInMachine.get(CENT_1));
+        assertSame(1, userCoinsInMachine.get(CENT_2));
+        assertSame(1, userCoinsInMachine.get(CENT_50));
+        assertSame(1, userCoinsInMachine.get(EURO_1));
+        assertSame(1, userCoinsInMachine.get(EURO_2));
 
         //after refunding no money of the user should be left in the machine
         userCoinsInMachine = vendingMachine.refundBalance();
-        assertSame(null, userCoinsInMachine.get(new Coin(CENT_1)));
-        assertSame(null, userCoinsInMachine.get(new Coin(CENT_2)));
-        assertSame(null, userCoinsInMachine.get(new Coin(CENT_50)));
-        assertSame(null, userCoinsInMachine.get(new Coin(CENT_1)));
-        assertSame(null, userCoinsInMachine.get(new Coin(EURO_2)));
+        assertSame(null, userCoinsInMachine.get(CENT_1));
+        assertSame(null, userCoinsInMachine.get(CENT_2));
+        assertSame(null, userCoinsInMachine.get(CENT_50));
+        assertSame(null, userCoinsInMachine.get(CENT_1));
+        assertSame(null, userCoinsInMachine.get(EURO_2));
     }
 
     @Test
@@ -60,24 +58,24 @@ public class VendingMachineTest {
 
         final HashMap<Coin, Integer> availableCoinsBefore = vendingMachine.getAvailableCoins();
 
-        assertSame(1, availableCoinsBefore.get(new Coin(CENT_1)));
-        assertSame(2, availableCoinsBefore.get(new Coin(CENT_2)));
-        assertSame(5, availableCoinsBefore.get(new Coin(CENT_5)));
-        assertSame(5, availableCoinsBefore.get(new Coin(EURO_1)));
+        assertSame(1, availableCoinsBefore.get(CENT_1));
+        assertSame(2, availableCoinsBefore.get(CENT_2));
+        assertSame(5, availableCoinsBefore.get(CENT_5));
+        assertSame(5, availableCoinsBefore.get(EURO_1));
 
         //add some coins and check test again
-        List<Coin> coinsInWallet = new ArrayList();
-        coinsInWallet.add(new Coin(CENT_1));
-        coinsInWallet.add(new Coin(CENT_2));
-        coinsInWallet.add(new Coin(CENT_2));
+        List<Coin> coinsInWallet = new ArrayList<>();
+        coinsInWallet.add(CENT_1);
+        coinsInWallet.add(CENT_2);
+        coinsInWallet.add(CENT_2);
         vendingMachine.insertCoins(coinsInWallet);
 
         final HashMap<Coin, Integer> availableCoinsAfter = vendingMachine.getAvailableCoins();
 
-        assertSame(2, availableCoinsAfter.get(new Coin(CENT_1)));
-        assertSame(4, availableCoinsAfter.get(new Coin(CENT_2)));
-        assertSame(5, availableCoinsAfter.get(new Coin(CENT_5)));
-        assertSame(5, availableCoinsAfter.get(new Coin(EURO_1)));
+        assertSame(2, availableCoinsAfter.get(CENT_1));
+        assertSame(4, availableCoinsAfter.get(CENT_2));
+        assertSame(5, availableCoinsAfter.get(CENT_5));
+        assertSame(5, availableCoinsAfter.get(EURO_1));
 
     }
 
@@ -97,13 +95,13 @@ public class VendingMachineTest {
 
         VendingMachine vendingMachine = new VendingMachine();
 
-        List<Coin> coinsInWallet = new ArrayList();
+        List<Coin> coinsInWallet = new ArrayList<>();
 
-        coinsInWallet.add(new Coin(CENT_1));
-        coinsInWallet.add(new Coin(CENT_1));
-        coinsInWallet.add(new Coin(CENT_50));
-        coinsInWallet.add(new Coin(EURO_1));
-        coinsInWallet.add(new Coin(EURO_2));
+        coinsInWallet.add(CENT_1);
+        coinsInWallet.add(CENT_1);
+        coinsInWallet.add(CENT_50);
+        coinsInWallet.add(EURO_1);
+        coinsInWallet.add(EURO_2);
         //total = 3.52
 
         vendingMachine.insertCoins(coinsInWallet);
@@ -120,23 +118,23 @@ public class VendingMachineTest {
 
         final Map<Coin, Integer> availableCoinsAfter = vendingMachine.refundBalance();
 
-        assertSame(1, availableCoinsAfter.get(new Coin(CENT_50)));
-        assertSame(1, availableCoinsAfter.get(new Coin(CENT_2)));
-        assertSame(1, availableCoinsAfter.get(new Coin(EURO_1)));
+        assertSame(1, availableCoinsAfter.get(CENT_50));
+        assertSame(1, availableCoinsAfter.get(CENT_2));
+        assertSame(1, availableCoinsAfter.get(EURO_1));
         //total = 1.52
     }
 
     @Test(expected = CoinsExchangeNotPossibleException.class)
     public void testCoinExchangeNotPossible() {
-        List<Coin> coinsInWallet = new ArrayList();
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
+        List<Coin> coinsInWallet = new ArrayList<>();
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
         vendingMachine.insertCoins(coinsInWallet);
 
         vendingMachine.purchaseItem("XLM");
@@ -146,15 +144,15 @@ public class VendingMachineTest {
 
     @Test(expected = SoldOutException.class)
     public void testCoinExchangeIsPossible() {
-        List<Coin> coinsInWallet = new ArrayList();
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
-        coinsInWallet.add(new Coin(EURO_2));
+        List<Coin> coinsInWallet = new ArrayList<>();
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
+        coinsInWallet.add(EURO_2);
         vendingMachine.insertCoins(coinsInWallet);
 
         vendingMachine.purchaseItem("XES");
@@ -163,6 +161,11 @@ public class VendingMachineTest {
         vendingMachine.purchaseItem("XES");
         vendingMachine.purchaseItem("XES");
         vendingMachine.purchaseItem("XES");
+    }
+
+    @Test
+    public void testBuyNonExistingItem() {
+        assertFalse(vendingMachine.purchaseItem("BCH"));
     }
 
 }
